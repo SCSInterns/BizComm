@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*:before,
+*:after {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: "Inter", sans-serif;
+	/* margin-top: 20px;
+	margin-left: 30px; */
+	/* margin-right: 30px; */
+}
+
+div {
+	font-weight: 700;
+}
+
+
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 5px !important;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #6C63FF !important; /* Color of the scrollbar thumb */
+	border-radius: 10px !important; /* Border radius of the scrollbar thumb */
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+	border: none;
+	border-radius: 100px;
+}
+.custom-scrollbar::-webkit-scrollbar-track:hover {
+	background: #dbd9ff !important; /* Background color of the scrollbar track on hover */
+}
+
+
+
+/* Small Scrollbar */
+.custom-small-scrollbar::-webkit-scrollbar {
+	height: 3px !important;
+}
+.custom-small-scrollbar::-webkit-scrollbar-thumb {
+	background: #6C63FF !important; /* Color of the scrollbar thumb */
+	border-radius: 10px !important; /* Border radius of the scrollbar thumb */
+}
+.custom-small-scrollbar::-webkit-scrollbar-track {
+	border: none;
+	border-radius: 100px;
+}
+.custom-horizontal-scrollbar::-webkit-scrollbar-track:hover {
+	background: #f6f5ff !important; /* Background color of the scrollbar track on hover */
+}
+
+
+/* Horizontal Scrollbar */
+.custom-horizontal-scrollbar::-webkit-scrollbar {
+	height: 6px !important;
+}
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
+	background: #c4c4cd !important; /* Color of the scrollbar thumb */
+	border-radius: 10px !important; /* Border radius of the scrollbar thumb */
+}
+.custom-horizontal-scrollbar::-webkit-scrollbar-track {
+	border: none;
+	border-radius: 100px;
+}
+.custom-horizontal-scrollbar::-webkit-scrollbar-track:hover {
+	background: #f6f5ff !important; /* Background color of the scrollbar track on hover */
+}
+
+/* Styles for the scrollbar track */
+::-webkit-scrollbar {
+	width: 8px; /* Width of the scrollbar */
+}
+
+/* Styles for the scrollbar thumb (the draggable handle) */
+::-webkit-scrollbar-thumb {
+	background: gray; /* Color of the scrollbar thumb */
+	border-radius: 10px; /* Border radius of the scrollbar thumb */
+}
+
+/* Styles for the scrollbar track on hover */
+::-webkit-scrollbar-track:hover {
+	background: #f0f0f0; /* Background color of the scrollbar track on hover */
+}
+
+/* Animation for the scrollbar thumb */
+@keyframes scrollAnimation {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/* Apply animation to scrollbar thumb */
+::-webkit-scrollbar-thumb {
+	animation: scrollAnimation 1.5s infinite; /* Apply animation to the scrollbar thumb */
+}
+
+.gridjs-table {
+	overflow-x: scroll !important;
+	width: 500px !important;
+	max-width: 100% !important;
+}

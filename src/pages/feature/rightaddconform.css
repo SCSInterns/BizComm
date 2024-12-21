@@ -1,0 +1,111 @@
+.mainaddcontact{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 30px;
+    max-width: 1000px;
+}
+
+.loanForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+.form-group input, 
+.form-group select {
+    background-color: rgba(240, 240, 240, 1);
+    color: rgba(0, 0, 0, 0.658);
+    /* border: none; */
+    border-radius: 6px;
+    width: 384px;
+    height: 36px;
+    padding-left: 17px;
+    padding-right: 17px;
+    font-weight: 550;
+    letter-spacing: normal;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+.form-group select {
+    width: 100%;
+    text-transform: capitalize;
+}
+
+.form-group input::placeholder {
+    text-transform: capitalize;
+}
+
+.form-group label {
+    text-transform: capitalize;
+}
+
+
+
+
+.btn-secondary{
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    margin-right: 10px;
+}
+.rightsideform{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 30px;
+   
+}
+
+.otp-btn-contacts{
+  
+    background-color:#6C63FF;
+    color:  #ffffff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 6px;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition: .2s ease-in-out;
+}
+
+.btn-primary-submit{
+    background-color:#6C63FF;
+    color:  #ffffff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 500;
+    border-radius: 6px;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition: .2s ease-in-out;
+    width: 100%;
+
+}
+
+.btn-primary-submit:hover {
+    background-color: #615ae9;
+    color: #eeeeee;
+}
+
+.otp-btn-contacts:hover{
+    background-color: #615ae9;
+    color: #eeeeee;
+}
+

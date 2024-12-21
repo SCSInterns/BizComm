@@ -1,0 +1,127 @@
+/* .textleftlastlog{
+    display: flex;
+    flex-direction: row;
+    
+}
+.haddinglastlog{
+    font-size: 20px;
+    color: rgba(128, 128, 128, 0.808);
+}
+.firstlastlogsection{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    
+}
+
+.search-div input {
+    outline: none !important;
+}
+
+
+.mainnamehaddingsectionlastlog{
+    display: flex;
+    flex-direction: row; */
+    /* justify-content: space-between; */
+/*    
+    height: 43px;
+    background-color: rgba(222, 222, 222, 0.29);
+    padding-left: 20px;
+    padding-right: 20px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 20px;
+
+    
+}
+.texthaddinglastlog {
+    font-size: 15px;
+}
+.lastlogsection{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.messageimglastlog{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+
+}
+.datafeatchintoapilastlog{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    padding-left: 20px;
+
+}
+
+.dataoflastlogsection{
+    background-color: rgba(238, 237, 237, 0.42);
+    padding-right: 20px;
+    margin-top: 14px;
+    border-radius: 6px;
+
+}
+.textlastlog{
+    font-size: 12px;
+}
+
+.last-btn-section-year{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.lastlog-name{
+    margin-right: 100px;
+    padding-right: 100px;
+    width: 10%;
+}
+.lastlog-date{
+    margin-right: 140px;
+    /* padding-right: 120px;
+    width: 15%;
+}
+
+.lastlog-id{
+    margin-right: 100px;
+    padding-right: 120px;
+    width: 11%;
+}
+
+.hlastlog-name{
+    margin-right: 100px;
+    padding-right: 110px;
+    width: 10%;
+}
+
+.hlastlog-date{
+    margin-right: 150px;
+    /* padding-right: 120px;
+    width: 15%;
+}
+
+.hlastlog-id{
+    margin-right: 100px;
+    padding-right: 120px;
+    width: 11%;
+}
+ */
+
+
+div.gridjs-wrapper .gridjs-table {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+div.gridjs-wrapper table thead {
+    /* width: 20px !important; */
+    /* height: 20px !important; */
+    /* border-radius: 10px !important;
+    overflow: hidden !important; */
+}

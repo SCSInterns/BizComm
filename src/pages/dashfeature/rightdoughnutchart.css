@@ -1,0 +1,68 @@
+/* RightDoughnutChart.css */
+
+
+.chart-wrap {
+  width: 100%;
+  margin-top: 40px;
+}
+
+.centered-text {
+  margin-top: 10px;
+}
+
+.chartdatadoughnut{
+  width: 300px;
+  height: 300px;
+  
+}
+
+.chartdatadoughnut {
+  width: 100%;
+  max-width: 500px; /* Adjust as necessary */
+  height: 400px; /* Adjust as necessary */
+}
+
+.btn-chart-section{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.time-period-buttons-btn{
+  color: #9E9E9E;
+  background-color: #F4F4F4;
+  border: 2px solid #F4F4F4;
+  margin-right: 10px;
+  padding-left: 15px;
+  padding-top: 7px;
+  padding-right: 15px;
+  padding-bottom: 7px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: 0.2s ease-in-out;
+}
+
+.time-period-buttons-btn:hover{
+
+  color: #6C63FF;
+  border: 2px solid #6C63FF;
+}
+
+.year-selection-btn{
+  color: #9E9E9E;
+  background-color: #F4F4F4;
+  border: 2px solid #F4F4F4;
+  padding-left: 15px;
+  padding-top: 7px;
+  padding-right: 15px;
+  padding-bottom: 7px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: 0.2s ease-in-out;
+}
+.year-selection-btn:hover{
+  color: #6C63FF;
+  border: 2px solid #6C63FF;
+}

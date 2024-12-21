@@ -1,0 +1,17 @@
+.main-historypage {
+	display: flex;
+	flex-direction: row;
+}
+
+.verticalline {
+	width: 3px;
+	min-height: 100dvh;
+	height: 100%;
+	background-color: black;
+	margin-top: -20px;
+	margin-left: 50px;
+}
+
+.rightside-section-history {
+	width: 1000px;
+}

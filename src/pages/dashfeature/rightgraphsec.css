@@ -1,0 +1,97 @@
+.graph-line-main{
+    box-shadow: 8px 8px 20px 2px rgba(78, 78, 78, 0.2);
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 10px;
+}
+.btndashcon{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.last-data{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+   
+    
+}
+.last-data div{
+    margin-right: 10px;
+    border: 2px solid #ffffff;
+    width: 112px;
+    height: 36px;
+    border-radius: 6px;
+    background-color: rgba(244, 244, 244, 1);
+    color: rgba(158, 158, 158, 1);
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s ease-in-out;
+}
+.last-data div:hover{
+   
+    color:#6C63FF;
+    border: 2px solid #6C63FF;
+
+}
+.btn-group{
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+
+}
+.btn-year{
+
+    font-size: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 6px;
+    background-color: rgba(244, 244, 244, 1);
+    color: rgba(158, 158, 158, 1);
+    width: 112px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s ease-in-out;
+
+}
+.btn-year:hover{
+    color:#6C63FF;
+    border: 2px solid #6C63FF;
+
+}
+
+.year-select{
+    width: 112px;
+    height: 40px;
+    font-size: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 6px;
+    color: rgba(158, 158, 158, 1);
+    background-color: rgba(244, 244, 244, 1);
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+}
+.year-select:hover{
+    color:#6C63FF;
+    border: 2px solid #6C63FF;
+
+}
+
+.graph-line-main{
+    width: 100%;
+    height: 378px;
+    
+}

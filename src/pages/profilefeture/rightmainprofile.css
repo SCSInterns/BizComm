@@ -1,0 +1,133 @@
+
+
+.firstsection-ggm{
+  background-color: #7770ff;
+  width: 100%;
+  height: 302px;
+  border-top-right-radius: 50px;
+  border-top-left-radius: 50px;
+}
+
+/* .rightmainprofile-ggm{
+  width: 100%;
+} */
+
+/* .thiredsection-ggm{
+  width: 75%;
+  height: fit-content;
+  background-color: rgb(162, 35, 35);
+  position: relative;
+  top: 50%;
+  left: 12.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 40px;
+  box-shadow: 8px 2px 20px #928f8f;
+} */
+
+/* .profileImage-ggm{
+  width: 200px;
+  height: 200px;
+  background-color: #e6e6e6;
+  position: relative;
+  border-radius: 200px;
+  top: -100px;
+  box-shadow: 8px 2px 20px #928f8f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+/* .username-profile-ggm{
+  position: relative;
+  top: -80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+} */
+
+.userName-second-text-ggm{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #646464;
+  font-weight: 500;
+  margin: 0px;
+  padding-top:2px ;
+  padding-bottom: 2px;
+}
+
+.userName-third-phone-ggm{
+ 
+  font-size: 15px;
+  padding-top:2px ;
+  padding-bottom: 2px;
+  color: #646464;
+  font-weight: 500;
+  margin: 0px;
+}
+
+.userName-forth-email-ggm{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  padding-top:2px ;
+  padding-bottom: 2px;
+  color: #646464;
+  font-weight: 500;
+  margin: 0px;
+}
+
+/* .userName-Business-work-show-ggm{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  padding-top:50px ;
+  margin: 0px;
+  
+  padding-bottom: 2px;
+  color: #000000af;
+  font-weight: 600;
+} */
+
+/* .show-borod-ggm{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+} */
+
+.files-profile-ggm{
+  margin-right: 20px;
+  
+}
+
+
+.show-borod-name-ggm{
+  color: #646464;
+  font-weight: 500;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.show-borod-count-ggm{
+  color: #6C63FF;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* .profile-image-size-ggm{
+  width: 120px;
+  height: 200px;
+  border-radius: 200px;
+} */
