@@ -8,6 +8,7 @@ import {
 	InfoIcon,
 	LayoutDashboardIcon,
 	PackageIcon,
+	LayoutTemplateIcon,
 } from "lucide-react";
 
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -108,6 +109,16 @@ const AdminSidebar = () => {
 					}`}>
 					<ScrollTextIcon />
 					Client Forms
+				</Link>
+				<Link
+					to="/admin/templates"
+					className={`flex items-center gap-2.5 leading-tight font-semibold w-full mb-3 p-4 text-lg ${
+						location.pathname.startsWith("/admin/templates")
+							? "bg-primary/20 text-primary py-2.5 rounded-lg"
+							: "text-gray-500 font-semibold py-2"
+					}`}>
+					<LayoutTemplateIcon />
+					User Templates
 				</Link>
 				<button
 					className={`flex items-center gap-3 w-full mb-2 text-lg p-4 py-1 text-gray-500 font-semibold`}

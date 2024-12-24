@@ -38,6 +38,7 @@ import AdminBusinessCategory from "./pages/AdminPages/AdminBusinessCategory";
 import AdminClientForm from "./pages/AdminPages/AdminClientForm";
 import AdminPackage from "./pages/AdminPages/AdminPackage";
 import TemplatePage from "./pages/VendorPages/TemplatePage";
+import AdminTemplate from "./pages/AdminPages/AdminTemplate";
 
 const App = () => {
 	useEffect(() => {
@@ -102,6 +103,7 @@ const App = () => {
 							<Route path="/admin/packages" element={<AdminPackage />} />
 							<Route path="/admin/business-categories" element={<AdminBusinessCategory />} />
 							<Route path="/admin/client-forms" element={<AdminClientForm />} />
+							<Route path="/admin/templates" element={<AdminTemplate />} />
 						</Route>
 					</Routes>
 				</FileProvider>

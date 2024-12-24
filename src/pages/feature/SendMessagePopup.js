@@ -226,7 +226,7 @@ const SendMessagePopup = ({ onClose, selectedContacts, showNotification }) => {
 	};
 
 	return (
-		<div className={`fixed top-0 left-0 w-full h-full flex justify-center items-center lg:px-20 md:px-14 sm:px-10 px-8 bg-[rgba(0,0,0,0.5)] transition-all duration-300`}>
+		<div className={`fixed top-0 left-0 w-full h-full flex justify-center items-center  !z-[999] lg:px-20 md:px-14 sm:px-10 px-8 bg-[rgba(0,0,0,0.5)] transition-all duration-300`}>
 			<div className="w-full h-fit max-h-[80%] overflow-hidden bg-white rounded-xl overflow-y-scroll custom-scrollbar">
 				<div className="send-message-popup-header bg-primary text-white p-5 mb-5">
 					<h2 className="text-4xl font-bold">Send Message</h2>

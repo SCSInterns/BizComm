@@ -1,3 +1,5 @@
+/** @format */
+
 import { ErrorMessage, Field } from "formik";
 import React from "react";
 
@@ -21,9 +23,9 @@ function FormikTextarea({
 	cols,
 }) {
 	return (
-		<div className={`font-normal ${containerClassName} relative`}>
+		<div className={`font-normal w-full ${containerClassName} relative`}>
 			<Field
-                as="textarea"
+				as="textarea"
 				id={name}
 				name={name}
 				placeholder={placeholder}
@@ -38,12 +40,10 @@ function FormikTextarea({
 				rows={rows}
 				className={`${className} mt-7`}
 			/>
-			<label htmlFor={name} className={`${labelClassName} absolute top-0 left-0 bg-white`}>{label}</label>
-			<ErrorMessage
-				name={name}
-				className={`text-red-500 text-sm font-normal ${errorClassName}`}
-				component="div"
-			/>
+			<label htmlFor={name} className={`${labelClassName} absolute top-0 left-0 bg-white`}>
+				{label}
+			</label>
+			<ErrorMessage name={name} className={`text-red-500 text-sm font-normal ${errorClassName}`} component="div" />
 		</div>
 	);
 }

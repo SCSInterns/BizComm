@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -23,7 +25,7 @@ const SignUp = () => {
 
 	const handleTogglePassword = () => setShowPassword(!showPassword);
 
-	const handleSubmit = async (values) => {
+	const handleSubmit = async values => {
 		try {
 			const fmData = new FormData();
 			fmData.append("user[name]", values.name);
@@ -31,26 +33,18 @@ const SignUp = () => {
 			fmData.append("user[password]", values.password);
 			fmData.append("user[address]", values.address);
 			fmData.append("user[mobile_number]", values.mobile_number);
-			fmData.append(
-				"user[business_category_id]",
-				parseInt(values.business_category_id)
-			);
+			fmData.append("user[business_category_id]", parseInt(values.business_category_id));
 			fmData.append("user[package_id]", parseInt(values.package_id));
 
 			const response = await axios.post("/api/v1/users", fmData);
 			if (response.status === 201) {
 				const user = response.data.user;
-				localStorage.setItem(
-					"access_token",
-					response.data.access_token
-				);
+				localStorage.setItem("access_token", response.data.access_token);
 				localStorage.setItem("user_id", user.id);
 				navigate("/vendor/dashboard");
 			}
 		} catch (error) {
-			toast.error(
-				error.response.data.message || "Error while creating user"
-			);
+			toast.error(error.response.data.message || "Error while creating user");
 		}
 	};
 
@@ -80,9 +74,7 @@ const SignUp = () => {
 				<h1 className="sm:text-5xl text-3xl font-bold text-center">
 					Biz<span className="text-blue">Comm</span>Sync
 				</h1>
-				<p className="sm:text-2xl text-center sm:my-4 my-2 mb-3 font-medium">
-					Welcome to our app
-				</p>
+				<p className="sm:text-2xl text-center sm:my-4 my-2 mb-3 font-medium">Welcome to our app</p>
 
 				<Formik
 					initialValues={{
@@ -95,8 +87,8 @@ const SignUp = () => {
 						package_id: "",
 					}}
 					validationSchema={AddUserValidations}
-					onSubmit={(values) => handleSubmit(values)}>
-					{({ errors }) => (
+					onSubmit={values => handleSubmit(values)}>
+					{({ errors, touched, setFieldValue }) => (
 						<Form className="flex flex-col gap-3 items-center justify-center w-full lg:px-10 md:px-10 px-6">
 							<div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
 								<FormikInput
@@ -105,10 +97,11 @@ const SignUp = () => {
 									name="name"
 									placeholder="Name"
 									labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-										errors.name ? "text-red-500" : ""
+										touched.name && errors.name ? "text-red-500" : ""
 									}`}
+									onChange={e => setFieldValue("name", e.target.value)}
 									className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-										errors.name
+										touched.name && errors.name
 											? "border-red-500 placeholder:text-red-500 text-red-500"
 											: "border-black"
 									} rounded-lg`}
@@ -119,13 +112,12 @@ const SignUp = () => {
 									name="mobile_number"
 									placeholder="Mobile Number"
 									length={10}
+									onChange={e => setFieldValue("mobile_number", e.target.value)}
 									labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-										errors.mobile_number
-											? "text-red-500"
-											: ""
+										touched.mobile_number && errors.mobile_number ? "text-red-500" : ""
 									}`}
 									className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-										errors.mobile_number
+										touched.mobile_number && errors.mobile_number
 											? "border-red-500 placeholder:text-red-500 text-red-500"
 											: "border-black"
 									} rounded-lg`}
@@ -135,11 +127,12 @@ const SignUp = () => {
 									type="email"
 									name="email"
 									placeholder="Email"
+									onChange={e => setFieldValue("email", e.target.value)}
 									labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-										errors.email ? "text-red-500" : ""
+										touched.email && errors.email ? "text-red-500" : ""
 									}`}
 									className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-										errors.email
+										touched.email && errors.email
 											? "border-red-500 placeholder:text-red-500 text-red-500"
 											: "border-black"
 									} rounded-lg`}
@@ -147,48 +140,37 @@ const SignUp = () => {
 								<div className="w-full relative">
 									<FormikInput
 										label={"Password"}
-										type={
-											showPassword ? "text" : "password"
-										}
+										type={showPassword ? "text" : "password"}
 										name="password"
 										placeholder="Password"
+										onChange={e => setFieldValue("password", e.target.value)}
 										labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-											errors.password
-												? "text-red-500"
-												: ""
+											touched.password && errors.password ? "text-red-500" : ""
 										}`}
 										className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-											errors.password
+											touched.password && errors.password
 												? "border-red-500 placeholder:text-red-500 text-red-500"
 												: "border-black"
 										} rounded-lg`}
 									/>
 									<p className="absolute right-1 top-[26px]">
-										<IconButton
-											onClick={handleTogglePassword}>
-											{showPassword ? (
-												<VisibilityOff />
-											) : (
-												<Visibility />
-											)}
+										<IconButton onClick={handleTogglePassword}>
+											{showPassword ? <VisibilityOff /> : <Visibility />}
 										</IconButton>
 									</p>
 								</div>
 								<FormikSelect
 									label={"Business Type"}
 									name={"business_category_id"}
-									selectedOption={
-										"Select Your Business Category"
-									}
+									selectedOption={"Select Your Business Category"}
 									optionData={businessCategories}
 									labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-										errors.business_category_id
-											? "text-red-500"
-											: ""
+										touched.business_category_id && errors.business_category_id ? "text-red-500" : ""
 									}`}
+									onChange={e => setFieldValue("business_category_id", e.target.value)}
 									valueProperty="id"
 									className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-										errors.business_category_id
+										touched.business_category_id && errors.business_category_id
 											? "border-red-500 placeholder:text-red-500 text-red-500"
 											: "border-black"
 									} rounded-lg`}
@@ -198,14 +180,13 @@ const SignUp = () => {
 									name={"package_id"}
 									selectedOption={"Select Your Package"}
 									optionData={packages}
+									onChange={(e) => setFieldValue("package_id", e.target.value)}
 									labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-										errors.package_id ? "text-red-500" : ""
+										touched.package_id && errors.package_id ? "text-red-500" : ""
 									}`}
 									valueProperty="id"
 									className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-										errors.package_id
-											? "border-red-500 placeholder:text-red-500 text-red-500"
-											: "border-black"
+										touched.package_id && errors.package_id ? "border-red-500 placeholder:text-red-500 text-red-500" : "border-black"
 									} rounded-lg`}
 								/>
 								<FormikTextarea
@@ -213,13 +194,12 @@ const SignUp = () => {
 									name={"address"}
 									placeholder="Address"
 									containerClassName={"col-span-2"}
+									onChange={(e) => setFieldValue("address", e.target.value)}
 									labelClassName={`md:text-base text-sm peer-focus:text-primary ${
-										errors.address ? "text-red-500" : ""
+										touched.address && errors.address ? "text-red-500" : ""
 									}`}
 									className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border ${
-										errors.address
-											? "border-red-500 placeholder:text-red-500 text-red-500"
-											: "border-black"
+										touched.address && errors.address ? "border-red-500 placeholder:text-red-500 text-red-500" : "border-black"
 									} rounded-lg`}
 								/>
 							</div>
@@ -231,9 +211,7 @@ const SignUp = () => {
 							</p>
 
 							<div className="w-full flex items-center justify-center gap-2">
-								<button
-									type="submit"
-									className="!bg-primary text-white !capitalize p-4 py-2 rounded-lg font-semibold">
+								<button type="submit" className="!bg-primary text-white !capitalize p-4 py-2 rounded-lg font-semibold">
 									Submit
 								</button>
 							</div>

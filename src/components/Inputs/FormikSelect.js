@@ -1,3 +1,5 @@
+/** @format */
+
 import { ErrorMessage, Field } from "formik";
 import React from "react";
 
@@ -16,12 +18,7 @@ function FormikSelect({
 }) {
 	return (
 		<div className={`font-normal w-full relative ${containerClassName}`}>
-			<Field
-				name={name}
-				as="select"
-				disabled={disable}
-				onChange={onChange}
-				className={`${className} mt-7`}>
+			<Field name={name} as="select" disabled={disable} onChange={onChange} className={`${className} mt-7`}>
 				<option selected value="" disabled>
 					{selectedOption}
 				</option>
@@ -34,11 +31,7 @@ function FormikSelect({
 			<label htmlFor={name} className={`${labelClassName} absolute top-0 left-0 bg-white`}>
 				{label}
 			</label>
-			<ErrorMessage
-				name={name}
-				className="text-red-500 text-sm mt-1 font-normal"
-				component="div"
-			/>
+			<ErrorMessage name={name} className="text-red-500 text-sm mt-1 font-normal" component="div" />
 		</div>
 	);
 }

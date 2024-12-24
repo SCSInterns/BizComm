@@ -88,7 +88,7 @@ const MetaSettings = () => {
 
 	return (
 		<div className="w-full h-full pl-4 relative">
-			<div className="w-full mt-2">
+			<div className="w-full mt-2 !z-0">
 				<div className="w-full flex flex-col items-start justify-start gap-2">
 					<div className="w-full flex items-center justify-start gap-2">
 						<SettingsIcon className="size-7 text-black" />
@@ -111,7 +111,7 @@ const MetaSettings = () => {
 						handleSubmit(values);
 					}}>
 					{({ values, errors }) => (
-						<Form>
+						<Form className="!z-0">
 							<div className="w-full grid md:grid-cols-2 gap-4">
 								<div className="relative">
 									<FormikInput

@@ -54,7 +54,7 @@ const Sidebar = () => {
 	};
 
 	return (
-		<div className="w-full max-w-68 p-6 border-r-2 border-black h-full min-h-dvh fixed top-0 left-0">
+		<div className="w-full max-w-68 p-6 border-r-2 border-black h-full min-h-dvh fixed top-0 left-0 z-10">
 			<h1 className="text-3xl font-bold w-full text-center mb-4">
 				Biz<span className="text-primary">Comm</span>Sync
 			</h1>
@@ -127,7 +127,7 @@ const Sidebar = () => {
 				</button>
 			</div>
 			{showLogoutConfirmation && (
-				<div className="fixed top-0 left-0 !z-[100] px-6 w-screen h-full min-h-screen flex items-center justify-center bg-[rgba(0,0,0,0.7)]">
+				<div className="fixed top-0 left-0 z-50 px-6 w-screen h-full min-h-screen flex items-center justify-center bg-[rgba(0,0,0,0.7)]">
 					<div className="w-full max-w-[500px] bg-red-50 rounded-lg !z-50">
 						<div className="flex items-center justify-center gap-2 w-full border-black border-b px-8 py-4">
 							<InfoIcon className="text-red-600" />

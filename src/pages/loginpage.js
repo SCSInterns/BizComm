@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -31,7 +33,7 @@ const LoginPage = () => {
 
 	const handleTogglePassword = () => setShowPassword(!showPassword);
 
-	const handleSubmit = async (values) => {
+	const handleSubmit = async values => {
 		// const errors = validate();
 		// if (Object.keys(errors).length > 0) {
 		// 	setErrors(errors);
@@ -40,15 +42,10 @@ const LoginPage = () => {
 
 		try {
 			if (localStorage.getItem("client_id") === null) {
-				const response = await axios.get(
-					"/api/v1/get_client_id_secret"
-				);
+				const response = await axios.get("/api/v1/get_client_id_secret");
 				if (response.status === 200) {
 					localStorage.setItem("client_id", response.data.client_id);
-					localStorage.setItem(
-						"client_secret",
-						response.data.client_secret
-					);
+					localStorage.setItem("client_secret", response.data.client_secret);
 				} else {
 					console.log(response);
 				}
@@ -61,10 +58,7 @@ const LoginPage = () => {
 
 			const response = await axios.post("/api/v1/login", fmData);
 			if (response.status === 200) {
-				localStorage.setItem(
-					"access_token",
-					response.data.access_token
-				);
+				localStorage.setItem("access_token", response.data.access_token);
 				localStorage.setItem("user_id", response.data.user.id);
 				localStorage.setItem("user_name", response.data.user.name);
 				if (response.data.user.role === "vendor") {
@@ -74,9 +68,7 @@ const LoginPage = () => {
 				}
 			}
 		} catch (error) {
-			toast.error(
-				error.response.data.message || "Login failed. Please try again."
-			);
+			toast.error(error.response.data.message || "Login failed. Please try again.");
 		}
 	};
 
@@ -100,42 +92,49 @@ const LoginPage = () => {
 							email: "",
 							password: "",
 						}}
-						// validationSchema={LoginValidations}
-						onSubmit={(values) => handleSubmit(values)}>
-						{({ errors, setFieldValue }) => (
+						validationSchema={LoginValidations}
+						onSubmit={values => handleSubmit(values)}>
+						{({ errors, touched, setFieldValue }) => (
 							<Form className="flex flex-col gap-3 items-center justify-center w-full">
 								<div className="w-full flex flex-col items-center justify-center gap-4">
 									<FormikInput
 										label={"Email"}
 										type={"email"}
 										name={"email"}
-										onChange={(e) => { setFieldValue("email", e.target.value) }}
+										onChange={e => {
+											setFieldValue("email", e.target.value);
+										}}
 										placeholder={"Email"}
-										labelClassName={`md:text-base text-sm peer-focus:text-primary text-gray-700`}
-										className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary p-3 border border-black rounded-lg`}
+										labelClassName={`md:text-base text-sm peer-focus:text-primary text-gray-700 ${
+											touched.email && errors.email ? "text-red-500" : ""
+										}`}
+										className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary p-3 border border-black rounded-lg ${
+											touched.email && errors.email
+												? "border-red-500 placeholder:text-red-500 text-red-500"
+												: "border-black"
+										}`}
 									/>
 									<div className="w-full relative">
 										<FormikInput
 											label={"Password"}
-											type={
-												showPassword
-													? "text"
-													: "password"
-											}
+											type={showPassword ? "text" : "password"}
 											name={"password"}
 											placeholder={"Password"}
-											onChange={(e) => { setFieldValue("password", e.target.value) }}
-											labelClassName={`md:text-base text-sm text-gray-700 peer-focus:text-primary`}
-											className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary p-3 border border-black rounded-lg`}
+											onChange={e => {
+												setFieldValue("password", e.target.value);
+											}}
+											labelClassName={`md:text-base text-sm text-gray-700 peer-focus:text-primary ${
+												touched.password && errors.password ? "text-red-500" : ""
+											}`}
+											className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary p-3 border border-black rounded-lg ${
+												touched.password && errors.password
+													? "border-red-500 placeholder:text-red-500 text-red-500"
+													: "border-black"
+											}`}
 										/>
 										<p className="absolute right-1 top-8">
-											<IconButton
-												onClick={handleTogglePassword}>
-												{showPassword ? (
-													<VisibilityOff />
-												) : (
-													<Visibility />
-												)}
+											<IconButton onClick={handleTogglePassword}>
+												{showPassword ? <VisibilityOff /> : <Visibility />}
 											</IconButton>
 										</p>
 									</div>
@@ -146,9 +145,7 @@ const LoginPage = () => {
 										<input type="checkbox" />
 										Remember me
 									</label>
-									<Link
-										to="/forget-password"
-										className="forgot-password-btn">
+									<Link to="/forget-password" className="forgot-password-btn">
 										Forgot your password?
 									</Link>
 								</div>

@@ -23,7 +23,7 @@ const VendorLayout = () => {
 	return (
 		<div className="w-full h-full relative flex">
 			<Sidebar />
-			<div className="w-full h-full p-4 overflow-y-scroll ml-68">
+			<div className="w-full h-full p-4 overflow-y-scroll ml-68 z-auto">
 				<Outlet />
 			</div>
 		</div>
