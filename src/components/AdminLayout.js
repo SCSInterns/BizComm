@@ -32,7 +32,7 @@ const AdminLayout = () => {
 			{authorized ? (
 				<>
 					<AdminSidebar />
-					<div className="w-full h-full p-6 overflow-y-scroll ml-68">
+					<div className="w-full h-full min-h-[calc(100vh-64px)] p-6 overflow-y-scroll ml-68">
 						<Outlet />
 					</div>
 				</>

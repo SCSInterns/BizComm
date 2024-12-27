@@ -7,6 +7,7 @@ import {
 	FilterIcon,
 	ImageIcon,
 	LayoutTemplateIcon,
+	MessageSquareTextIcon,
 	PencilIcon,
 	PlusIcon,
 	Trash2Icon,
@@ -23,6 +24,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import EditTemplateForm from "./TemplateForm/EditTemplateForm";
 import Badges from "../../components/AdminComponents/Badges";
+import { Link } from "react-router-dom";
 
 const TemplatePage = () => {
 	// const [templateData, setTemplateData] = useState([]);
@@ -38,10 +40,12 @@ const TemplatePage = () => {
 
 	const fetchTemplates = async () => {
 		await axios
+			// .get("/api/v1/user_templates")
 			.get("/api/v1/user_templates")
 			.then(response => {
-				// setTemplateData(response.data.data);
-				setFilteredData(response.data.user_templates);
+				setFilteredData(response.data.user_templates.data);
+				// setFilteredData(response.data.user_templates);
+				setIsLoading(false);
 			})
 			.catch(error => {
 				toast.error(error?.response?.data?.message || error.message || "Error while fetching templates");
@@ -80,6 +84,7 @@ const TemplatePage = () => {
 		image: <ImageIcon className="size-4" />,
 		video: <VideoIcon className="size-4" />,
 		document: <FileTextIcon className="size-4" />,
+		message_only: <MessageSquareTextIcon className="size-4" />,
 	};
 
 	return (
@@ -93,12 +98,11 @@ const TemplatePage = () => {
 					</div>
 					<div className="h-full flex items-center justify-center gap-2">
 						<div className="relative group/add-template">
-							<div
-								onClick={() => setOpenAddTemplateForm(true)}
+							<Link to={"/vendor/templates/add-template"}
 								className="p-2 pr-[18px] relative bg-primary rounded-lg cursor-pointer text-white flex items-center justify-center select-none">
 								<LayoutTemplateIcon size={20} />
 								<PlusIcon size={13} className="absolute right-[5.5px] top-3" />
-							</div>
+							</Link>
 							<CustomTooltip
 								text={"Add Template"}
 								position={"left"}
@@ -229,13 +233,13 @@ const TemplatePage = () => {
 						<thead className="w-full bg-primary/90">
 							<tr>
 								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-12">Sr No.</td>
-								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-32">Template Name</td>
-								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-32">Template Type</td>
-								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-32">Template Language</td>
+								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-40">Template Name</td>
+								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-40">Template Type</td>
+								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-20">Template Language</td>
 								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-32">Template Category</td>
 								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-">Template Media</td>
 								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-">Template Status</td>
-								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-40">Created At</td>
+								{/* <td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-40">Created At</td> */}
 								<td className="p-4 text-sm font-semibold w-auto h-full text-white min-w-24">Actions</td>
 							</tr>
 						</thead>
@@ -245,32 +249,41 @@ const TemplatePage = () => {
 							<tbody>
 								{currentItems.length > 0 ? (
 									currentItems.map((template, idx) => {
-										const created_at = new Date(template.created_at);
+										// const created_at = new Date(template.created_at);
+										const type =
+											template.components[0].type === "HEADER" && template.components[0].format !== "TEXT"
+												? template.components[0].format
+												: "message_only";
 										return (
 											<tr key={idx} className={`border-b`}>
 												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full">{idx + 1}</td>
-												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize">
-													{template.template_name}
+												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full">{template.name}</td>
+												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full lowercase flex gap-1 mt-2.5 items-center">
+													{templateTypeIcons[type.toLowerCase()]}
+
+													<p className="flex">
+														<span className="uppercase">{type.substring(0, 1)}</span>
+														<span>{type.replaceAll("_", " ").substring(1)}</span>
+													</p>
 												</td>
-												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize flex gap-1 mt-2.5 items-center">
-													{templateTypeIcons[template.template_type]}
-													{template.template_type.replace("_", " ")}
+												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full lowercase">
+													{template.language}
 												</td>
-												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize">
-													{template.template_language}
-												</td>
-												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize">
-													{template.template_category}
-												</td>
-												<td className={`p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize ${
-														template.media_url ? "cursor-pointer hover:text-primary" : "opacity-30 cursor-not-allowed"
+												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full">{template.category}</td>
+												<td
+													className={`p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize ${
+														template.components[0].example?.header_handle?.[0]
+															? "cursor-pointer hover:text-primary"
+															: "opacity-30 cursor-not-allowed"
 													}`}>
-													<EyeIcon onClick={() => handleViewMedia(template.media_url)} />
+													<EyeIcon
+														onClick={() => handleViewMedia(template.components[0].example?.header_handle?.[0])}
+													/>
 												</td>
 												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full capitalize">
-													<Badges type={template.template_status} />
+													<Badges type={template.status} />
 												</td>
-												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full">
+												{/* <td className="p-4 text-sm font-normal text-gray-700 w-fit h-full">
 													{created_at.toLocaleString("en-US", {
 														day: "2-digit",
 														month: "short",
@@ -279,9 +292,9 @@ const TemplatePage = () => {
 														minute: "2-digit",
 														hour12: true,
 													})}
-												</td>
+												</td> */}
 												<td className="p-4 text-sm font-normal text-gray-700 w-fit h-full">
-													<button>
+													{/* <button>
 														<PencilIcon
 															onClick={() => {
 																setSelectedTemplate(template);
@@ -289,7 +302,7 @@ const TemplatePage = () => {
 															}}
 															className="size-5 mr-3 text-primary"
 														/>
-													</button>
+													</button> */}
 													<button>
 														<Trash2Icon
 															onClick={() => handleDeleteTemplate(template)}
@@ -315,9 +328,9 @@ const TemplatePage = () => {
 				</div>
 				<CustomPagination currentPage={currentPage} totalPages={totalPages} handlePageChange={handlePageChange} />
 
-				{openAddTemplateForm && (
+				{/* {openAddTemplateForm && (
 					<AddTemplateForm onClose={() => setOpenAddTemplateForm(false)} fetchTemplates={fetchTemplates} />
-				)}
+				)} */}
 
 				{openEditTemplateForm && (
 					<EditTemplateForm

@@ -16,12 +16,13 @@ import whatsappBG from "../../../image/whatsapp-bg.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const AddTemplateForm = ({ onClose, fetchTemplates }) => {
+const AddTemplateForm = ({ className }) => {
 	const [openCategoryInfo, setOpenCategoryInfo] = useState(false);
 	const [bodyVariables, setBodyVariables] = useState([]);
-	const [media, setMedia] = useState(null);
+	const [headerText, setHeaderText] = useState("");
+	const [buttons, setButtons] = useState({});
 	const [body, setBody] = useState("Hello");
-	const [templateType, setTemplateType] = useState("");
+	const [templateType, setTemplateType] = useState("none");
 
 	// FUnction to add variable to body
 	const addBodyVariable = ({ setFieldValue }) => {
@@ -44,24 +45,17 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 		setFieldValue("body", newValue);
 		setBody(newValue);
 
-		const regex = /\{\{variable-[\w-]+\}\}/g;
+		const regex = /\{\{.+?\}\}/g;
 		const currentVariables = newValue.match(regex) || [];
 		setBodyVariables(currentVariables);
 
-		// const totalWords = newValue.trim().split(/\s+/).length;
-		// const nonVariableWords = totalWords - currentVariables.length;
+		const totalWords = newValue.trim().split(/\s+/).length;
+		const nonVariableWords = totalWords - currentVariables.length;
+		const requiredNonVariableWords = 2 * currentVariables.length + 1;
 
-		// const requiredNonVariableWords = 2 * currentVariables.length + 1;
-
-		// if (requiredNonVariableWords > nonVariableWords) {
-		// 	setFieldError(
-		// 		"body",
-		// 		`Min non-variable words not met. Current words: ${nonVariableWords}, Required words: ${requiredNonVariableWords}`
-		// 	);
-		// 	console.error(
-		// 		`Error! Current words: ${nonVariableWords}, Required words: ${requiredNonVariableWords}`
-		// 	);
-		// }
+		if (requiredNonVariableWords > nonVariableWords) {
+			setFieldError("body", `Please include at least ${requiredNonVariableWords} non-variable words.`);
+		}
 	};
 
 	const transformDoubleAsterisksAndUnderscores = text => {
@@ -79,59 +73,94 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 		});
 	};
 
-	const handleTempTypeChange = (e, setFieldValue) => {
-		setFieldValue("template_type", e.target.value);
-		setTemplateType(e.target.value);
-	};
-
-	const handleFormSubmit = async values => {
+	const handleFormSubmit = values => {
 		const formData = new FormData();
 		const contentVariables = bodyVariables.map(variable => variable.replace(/\{\{|\}\}/g, ""));
-		console.log(contentVariables);
 
-		formData.append("user_template[template_name]", values.template_name);
-		formData.append("user_template[template_type]", values.template_type);
-		formData.append("user_template[template_language]", values.template_language);
-		formData.append("user_template[template_category]", values.template_category);
-		formData.append("user_template[media]", media);
-		formData.append("user_template[subtitle]", values.subtitle);
-		// formData.append("user_template[buttons]", JSON.stringify(values.buttons));
-		// formData.append("user_template[has_buttons]", values.buttons.length > 0);
-		formData.append("user_template[body]", transformDoubleAsterisksAndUnderscores(values.body));
-		contentVariables.forEach(variable => {
-			formData.append("user_template[content_variables][]", variable);
+		const payload = {
+			name: values.template_name,
+			language: values.template_language,
+			category: values.template_category,
+			subcategory: values.template_subcategory,
+			components: [],
+		};
+
+		if (templateType && templateType !== "none") {
+			payload.components.push({
+				type: "HEADER",
+				format: templateType.toUpperCase(),
+				text: headerText,
+			});
+		}
+
+		payload.components.push({
+			type: "BODY",
+			text: transformDoubleAsterisksAndUnderscores(values.body),
 		});
 
-		axios.post(`/api/v1/user_templates`, formData, { multipart: true }).then(response => {
-			toast.success(response.data.message || "Template added successfully");
-			fetchTemplates();
-			onClose();
-		});
+		if (values.buttons.value !== "") {
+			payload.components.push({
+				type: "BUTTONS",
+				subtype: values.buttons.value,
+				parameters: [
+					{
+						type: "text",
+						text: values.buttons.value === "url" ? "Visit Website" : "Call Us",
+					},
+					values.buttons.value === "url"
+						? {
+								type: values.buttons.value,
+								url: values.buttons.body.website_url,
+						  }
+						: {
+								type: values.buttons.value,
+								phone_number: "+" + values.buttons.body.cc + values.buttons.body.phone_number,
+						  },
+				],
+			});
+		}
+
+		console.log(values);
+		console.log(payload);
+
+		// formData.append("user_template[template_name]", values.template_name);
+		// formData.append("user_template[template_type]", values.template_header);
+		// formData.append("user_template[template_language]", values.template_language);
+		// formData.append("user_template[template_category]", values.template_category);
+		// formData.append("user_template[template_subcategory]", values.template_subcategory);
+		// formData.append("user_template[subtitle]", values.subtitle);
+		// // formData.append("user_template[buttons]", JSON.stringify(values.buttons));
+		// // formData.append("user_template[has_buttons]", values.buttons.length > 0);
+		// formData.append("user_template[body]", transformDoubleAsterisksAndUnderscores(values.body));
+		// contentVariables.forEach(variable => {
+		// 	formData.append("user_template[content_variables][]", variable);
+		// });
+
+		// axios.post(`/api/v1/user_templates`, formData, { multipart: true }).then(response => {
+		// toast.success(response.data.message || "Template added successfully");
+		// });
 	};
 
 	return (
-		<FormHeaderComponent
-			headerText="Add Template"
-			onClose={onClose}
-			className={"lg:!max-w-[90%] !max-w-[95%]"}
-			childrenClassName={"w-full flex md:flex-row flex-col-reverse items-start justify-start gap-4"}>
+		<div className={className}>
 			<Formik
 				initialValues={{
 					template_name: "",
-					template_type: "",
 					template_language: "",
-					template_category: "",
-					media: null,
-					body: body,
-					subtitle: "",
-					buttons: [],
+					template_category: "marketing",
+					template_subcategory: "custom",
+					template_header: "none",
+					header_text: "",
+					body: "",
+					variableValues: [],
+					buttons: { value: "", body: {} },
 				}}
 				enableReinitialize
-				onSubmit={values => handleFormSubmit(values)}
-				validationSchema={TemplateValidations}>
-				{({ setFieldValue, errors, touched, setFieldError, values }) => (
+				validationSchema={TemplateValidations}
+				onSubmit={values => handleFormSubmit(values)}>
+				{({ setFieldValue, setFieldError, values }) => (
 					<Form className="w-full flex flex-col items-start justify-center gap-4">
-						{/* Name - Type */}
+						{/* Name - Language */}
 						<div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
 							<FormikInput
 								type={"text"}
@@ -145,48 +174,27 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 								className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border border-black rounded-lg`}
 							/>
 							<FormikSelect
-								name={"template_type"}
-								label={"Template Type"}
+								name={"template_language"}
+								label={"Template Language"}
 								optionData={[
+									{ value: "en", label: "English" },
+									{ value: "en_US", label: "English(US)" },
 									{
-										value: "message_only",
-										label: "Message Only",
+										value: "en_UK",
+										label: "English(UK)",
 									},
-									{ value: "image", label: "Image" },
-									{ value: "video", label: "Video" },
-									{ value: "pdf", label: "PDF" },
 								]}
-								onChange={e => handleTempTypeChange(e, setFieldValue)}
+								onChange={e => setFieldValue("template_language", e.target.value)}
 								valueProperty={"value"}
 								labelProperty={"label"}
-								selectedOption={"Select template type"}
+								selectedOption={"Select language"}
 								labelClassName={`md:text-base text-sm peer-focus:text-primary`}
 								className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg`}
 							/>
 						</div>
 
-						{/* Language - Category */}
+						{/* Category - Subcategory */}
 						<div className="w-full grid md:grid-cols-2 grid-cols-1 gap-4">
-							<FormikSelect
-								name={"template_language"}
-								label={"Template Language"}
-								optionData={[
-									{ value: "marketing", label: "Marketing" },
-									{ value: "utility", label: "Utility" },
-									{
-										value: "authentication",
-										label: "Authentication",
-									},
-								]}
-								valueProperty={"value"}
-								labelProperty={"label"}
-								onChange={e => {
-									setFieldValue("template_language", e.target.value);
-								}}
-								selectedOption={"Select a language"}
-								labelClassName={`md:text-base text-sm peer-focus:text-primary w-full`}
-								className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg`}
-							/>
 							<FormikSelect
 								name={"template_category"}
 								label={
@@ -212,10 +220,57 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 								labelClassName={`md:text-base text-sm peer-focus:text-primary w-full`}
 								className={`w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg`}
 							/>
+							<FormikInput
+								type={"text"}
+								name={"template_subcategory"}
+								label={"Template Subcategory"}
+								readOnly={true}
+								value={["marketing", "utility"].includes(values.template_category) ? "custom" : "one-time passcode"}
+								labelClassName={`md:text-base text-sm peer-focus:text-primary w-full`}
+								className={`w-full capitalize cursor-not-allowed mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg`}
+							/>
+						</div>
+
+						{/* Header */}
+						<div className="w-full flex flex-col gap-2">
+							<FormikSelect
+								name={"header"}
+								label={"Header"}
+								optionData={[
+									{ value: "none", label: "None" },
+									{ value: "text", label: "Text" },
+									{ value: "image", label: "Image" },
+									{ value: "video", label: "Video" },
+									{ value: "document", label: "Document" },
+								]}
+								valueProperty={"value"}
+								labelProperty={"label"}
+								onChange={e => {
+									setHeaderText("");
+									setTemplateType(e.target.value);
+									setFieldValue("template_header", e.target.value);
+								}}
+								selectedOption={"Select Header"}
+								labelClassName={"md:text-base text-sm peer-focus:text-primary w-full"}
+								className={
+									"w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg"
+								}
+							/>
+							{templateType !== "none" ? (
+								<input
+									type="text"
+									id="header-text"
+									name="header-text"
+									placeholder={templateType === "text" ? "Enter text" : "Enter the media link"}
+									value={headerText}
+									onChange={e => setHeaderText(e.target.value)}
+									className="w-full text-xs !mt-0 peer font-normal !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg"
+								/>
+							) : null}
 						</div>
 
 						{/* Body */}
-						<div className="w-full">
+						<div className="w-full -mb-1">
 							<FormikTextarea
 								name={"body"}
 								label={
@@ -239,35 +294,84 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 								className={`!w-full h-40 mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-3 border border-black rounded-lg`}
 							/>
 						</div>
+						{bodyVariables.length > 0 && (
+							<div className="w-full flex flex-col gap-3">
+								<p className="md:text-base text-sm font-normal w-full -mb-2">Variables default values</p>
+								<div className="w-full grid md:grid-cols-2 grid-cols-1 gap-3">
+									{bodyVariables.map((variable, index) => (
+										<FormikInput
+											key={index}
+											type={"text"}
+											name={`variableValues[${index}]`}
+											onChange={e => setFieldValue(`variableValues[${index}]`, e.target.value)}
+											placeholder={`${variable.replaceAll("{{", "").replaceAll("}}", "")} value`}
+											className={"mt-0 !text-xs"}
+										/>
+									))}
+								</div>
+							</div>
+						)}
 
-						{/* Media URL */}
-						{templateType !== "message_only" && templateType !== "pdf" && templateType !== "" && (
-							<div className="w-full relative -mt-3">
+						{/* Select Button Type */}
+						<div className="w-full">
+							<FormikSelect
+								name={"buttons.value"}
+								label={"Buttons"}
+								optionData={[
+									{ value: "phone_number", label: "Call Phone Number" },
+									{ value: "url", label: "Visit Website" },
+								]}
+								valueProperty={"value"}
+								labelProperty={"label"}
+								onChange={e => setFieldValue("buttons.value", e.target.value)}
+								selectedOption={"Select Button"}
+								labelClassName={"md:text-base text-sm peer-focus:text-primary w-full"}
+								className={
+									"w-full mt-1 peer font-normal text-sm !outline-none focus:ring-4 focus:ring-primary/40 focus:border-primary py-2 px-2 border border-black rounded-lg"
+								}
+							/>
+						</div>
+
+						{/* Render button fields based on selected option */}
+						{values.buttons.value === "phone_number" && (
+							<div className="w-full flex items-center justify-center gap-4">
 								<FormikInput
-									type="file"
-									name="media"
-									label={"Sample Media File"}
-									labelClassName={`md:text-base text-sm peer-focus:text-primary`}
-									className={`w-full mt-1 peer font-normal text-sm !outline-none file:bg-primary file:border-none file:rounded file:text-xs file:mr-2 file:py-1.5 file:px-3 file:text-white focus:ring-4 focus:ring-primary/40 focus:border-primary p-2 border border-black rounded-lg`}
-									onChange={e => {
-										setFieldValue("media", e.target.files[0]);
-										var media = document.getElementById(
-											`${templateType === "image" ? "previewImage" : "videoPreview"}`
-										);
-										setMedia(e.target.files[0]);
-										var urlBlob = URL.createObjectURL(e.target.files[0]);
-										media.src = urlBlob;
-										if (templateType === "video") {
-											media.load();
-											media.onloadeddata = function () {
-												media.play();
-											};
-										}
-									}}
+									type="number"
+									max={99999}
+									length={6}
+									name="buttons.body.cc"
+									label="Country Code"
+									placeholder="Enter Country Code"
+									labelClassName={"!text-xs"}
+									onChange={e => setFieldValue("buttons.body.cc", e.target.value)}
+									className="!mt-5 text-xs"
+								/>
+								<FormikInput
+									type="text"
+									name="buttons.body.phone_number"
+									label="Phone Number"
+									placeholder="Enter Phone Number"
+									labelClassName={"!text-xs"}
+									onChange={e => setFieldValue("buttons.body.phone_number", e.target.value)}
+									className="!mt-5 text-xs"
+								/>
+							</div>
+						)}
+						{values.buttons.value === "url" && (
+							<div className="w-full">
+								<FormikInput
+									type="url"
+									name="buttons.body.website_url"
+									label="Website URL"
+									placeholder="Enter Website URL"
+									labelClassName={"!text-xs"}
+									onChange={e => setFieldValue("buttons.body.website_url", e.target.value)}
+									className="!mt-5 text-xs"
 								/>
 							</div>
 						)}
 
+						{/* Submit Button */}
 						<button type="submit" className="bg-primary text-white font-normal px-4 py-2.5 rounded-lg">
 							Submit
 						</button>
@@ -276,10 +380,8 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 			</Formik>
 
 			{/* Preview Div */}
-			<div className="md:w-80 w-full bg-gray-100 shadow border border-primary/10 p-4 rounded-lg h-fit max-h-full">
-				{/* Preview Header */}
+			<div className="xl:max-w-72 lg:max-w-64 max-w-full w-full bg-gray-100 shadow border border-primary/10 p-4 rounded-lg h-fit max-h-full">
 				<p className="text-xl mb-2">Template Preview</p>
-				{/* Preview Body */}
 				<div className="relative w-full h-80 overflow-hidden rounded border border-primary/30">
 					{/* Preview bg image */}
 					<img
@@ -291,11 +393,14 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 						<TriangleRightIcon className="absolute top-[7.5px] z-10 left-2 size-4 text-white fill-white -rotate-90" />
 						{/* Preview Message */}
 						<div className="w-full h-fit max-h-full bg-white relative shadow no-scrollbar overflow-y-scroll rounded-lg rounded-tl-none p-1 font-normal break-words text-xs">
+							{templateType === "text" && <p className="text-base font-bold w-full mx-1 pr-1">{headerText}</p>}
 							{templateType === "image" && (
 								<div className="w-full md:h-28 h-40 flex items-center justify-center rounded overflow-hidden">
 									<img
 										id="previewImage"
-										src={"https://www.huaweicentral.com/wp-content/uploads/2021/09/whatsapp-1-768x432.jpg"}
+										src={
+											headerText || "https://www.huaweicentral.com/wp-content/uploads/2021/09/whatsapp-1-768x432.jpg"
+										}
 										alt="Preview img not selected"
 										className="w-full md:h-28 h-40 aspect-video object-cover font-normal z-10"
 									/>
@@ -304,18 +409,19 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 							{templateType === "video" && (
 								<div className="w-full md:h-28 h-40 flex items-center justify-center rounded overflow-hidden">
 									<div className="w-full md:h-28 h-40 aspect-video object-cover font-normal z-10 bg-gray-300 flex items-center justify-center">
-										{/* <CirclePlayIcon className="text-gray-600 size-10 stroke-1" /> */}
-										<video
+										<CirclePlayIcon className="text-gray-600 size-10 stroke-1" />
+										{/* <video
 											// controls
 											id="videoPreview"
 											className="w-full h-full object-cover"
+											src={headerText || "https://www.youtube.com/watch?v=RlPNh_PBZb4"}
 											autoPlay
 											muted
-										/>
+										/> */}
 									</div>
 								</div>
 							)}
-							{templateType === "pdf" && (
+							{templateType === "document" && (
 								<div className="w-full md:h-28 h-40 flex items-center justify-center rounded overflow-hidden">
 									<div className="w-full md:h-28 h-40 aspect-video object-cover font-normal z-10 bg-gray-300 flex items-center justify-center">
 										<FileTextIcon className="text-gray-600 size-10 stroke-1" />
@@ -323,13 +429,15 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 								</div>
 							)}
 							<div
-								className={`font-normal leading-relaxed px-1 ${
-									templateType === "message_only" ? "mt-px" : "mt-1"
-								} mb-px`}
+								className={`font-normal leading-relaxed pt-1 px-1 mb-px`}
 								dangerouslySetInnerHTML={{
 									__html: transformDoubleAsterisksAndUnderscores(body) || "please enter a message",
 								}}
 							/>
+							{}
+							<div>
+
+							</div>
 						</div>
 					</div>
 				</div>
@@ -364,7 +472,7 @@ const AddTemplateForm = ({ onClose, fetchTemplates }) => {
 					</div>
 				</FormHeaderComponent>
 			)}
-		</FormHeaderComponent>
+		</div>
 	);
 };
 

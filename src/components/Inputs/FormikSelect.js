@@ -31,7 +31,7 @@ function FormikSelect({
 			<label htmlFor={name} className={`${labelClassName} absolute top-0 left-0 bg-white`}>
 				{label}
 			</label>
-			<ErrorMessage name={name} className="text-red-500 text-sm mt-1 font-normal" component="div" />
+			<ErrorMessage name={name} className="text-red-500 text-xs mt-1 font-normal" component="div" />
 		</div>
 	);
 }

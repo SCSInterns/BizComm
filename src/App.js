@@ -39,6 +39,8 @@ import AdminClientForm from "./pages/AdminPages/AdminClientForm";
 import AdminPackage from "./pages/AdminPages/AdminPackage";
 import TemplatePage from "./pages/VendorPages/TemplatePage";
 import AdminTemplate from "./pages/AdminPages/AdminTemplate";
+import AddTemplateForm from "./pages/VendorPages/TemplateForm/AddTemplateForm";
+import AddTemplatePage from "./pages/VendorPages/AddTemplatePage";
 
 const App = () => {
 	useEffect(() => {
@@ -90,6 +92,7 @@ const App = () => {
 							<Route path="/vendor/dashboard" element={<DashboardPage />} />
 							<Route path="/vendor/client-form" element={<AddClientForm />} />
 							<Route path="/vendor/templates" element={<TemplatePage />} />
+							<Route path="/vendor/templates/add-template" element={<AddTemplatePage />} />
 							<Route path="/vendor/history" element={<HistoryPage />} />
 							<Route path="/vendor/upload" element={<UploadPage />} />
 							<Route path="/vendor/meta-settings" element={<MetaSettings />} />

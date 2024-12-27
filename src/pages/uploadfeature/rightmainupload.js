@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useFileContext } from "../../contexts/FileContext";
@@ -12,8 +14,7 @@ import { UploadIcon } from "lucide-react";
 import not_found from "../../image/404.svg";
 
 const RightmainUpload = () => {
-	const { uploadedFiles, setUploadedFiles, selectedFiles, setSelectedFiles } =
-		useFileContext();
+	const { uploadedFiles, setUploadedFiles, selectedFiles, setSelectedFiles } = useFileContext();
 	const [uploadError, setUploadError] = useState(null);
 	const [filterType, setFilterType] = useState("all");
 	const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -21,7 +22,8 @@ const RightmainUpload = () => {
 
 	const fetchUploadedFiles = useCallback(async () => {
 		try {
-			const response = await axios.get("/api/v1/get_files");
+			const response = await axios.get("/api/v1/users/get_files");
+			// const response = await axios.get("/api/v1/get_files");
 			setUploadedFiles(response.data.files);
 		} catch (error) {
 			console.error("Error fetching uploaded files:", error);
@@ -33,10 +35,9 @@ const RightmainUpload = () => {
 		fetchUploadedFiles();
 	}, [fetchUploadedFiles]);
 
-	const handleFileChange = (event) => {
+	const handleFileChange = event => {
 		let files = Array.from(event.target.files);
-		console.log(files);
-		files.forEach((file) => {
+		files.forEach(file => {
 			if (file.size > 5000000) {
 				toast.error("File size should be less than 5MB.");
 				event.target.value = "";
@@ -46,21 +47,18 @@ const RightmainUpload = () => {
 			}
 		});
 		const allowedTypes = ["image/*", "video/*", "application/*"];
-		const filteredFiles = Array.from(files).filter((file) =>
-			allowedTypes.some((type) => file.type.match(type))
-		);
+		const filteredFiles = Array.from(files).filter(file => allowedTypes.some(type => file.type.match(type)));
 		setSelectedFiles(filteredFiles);
-		console.log(selectedFiles);
 	};
 
 	const handleUpload = async () => {
 		const formData = new FormData();
-		selectedFiles.forEach((file) => {
-			formData.append("upload_file[files][]", file);
+		selectedFiles.forEach(file => {
+			formData.append("files[]", file);
 		});
 
 		try {
-			const response = await axios.post("api/v1/upload_file", formData, {
+			const response = await axios.post("api/v1/users/upload_files", formData, {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			toast.success(response.data.message);
@@ -70,25 +68,18 @@ const RightmainUpload = () => {
 			setTimeout(() => setShowSuccessMessage(false), 3000);
 		} catch (error) {
 			console.error("Error uploading files:", error);
-			toast.error(
-				`Error uploading files: ${
-					error.response?.data?.message ||
-					"An error occurred while uploading files."
-				}`
-			);
-			setUploadError(error)
+			toast.error("Error uploading files.");
+			// setUploadError(error);
 		}
 	};
 
-	const handleFilter = (type) => {
+	const handleFilter = type => {
 		setFilterType(type);
 	};
 
-	const handleSelectFile = (fileKey) => {
-		setSelectedUploadedFiles((prev) =>
-			prev.includes(fileKey)
-				? prev.filter((key) => key !== fileKey)
-				: [...prev, fileKey]
+	const handleSelectFile = fileKey => {
+		setSelectedUploadedFiles(prev =>
+			prev.includes(fileKey) ? prev.filter(key => key !== fileKey) : [...prev, fileKey]
 		);
 		console.log(selectedUploadedFiles);
 	};
@@ -97,23 +88,14 @@ const RightmainUpload = () => {
 		if (selectedUploadedFiles.length === filteredFiles.length) {
 			setSelectedUploadedFiles([]);
 		} else {
-			setSelectedUploadedFiles(filteredFiles.map((file) => file.key));
+			setSelectedUploadedFiles(filteredFiles.map(file => file.key));
 		}
 	};
 
 	const handleDeleteSelected = async () => {
 		try {
-			await axios
-				.post(
-					`api/v1/delete_uploaded_files/${localStorage.getItem(
-						"user_id"
-					)}`,
-					{ files: selectedUploadedFiles }
-				)
-				.then(() => fetchUploadedFiles());
-			setUploadedFiles((prev) =>
-				prev.filter((file) => !selectedUploadedFiles.includes(file.key))
-			);
+			await axios.post(`api/v1/users/delete_files/`, { files: selectedUploadedFiles }).then(() => fetchUploadedFiles());
+			setUploadedFiles(prev => prev.filter(file => !selectedUploadedFiles.includes(file.key)));
 			setSelectedUploadedFiles([]);
 		} catch (error) {
 			console.error("Error deleting files:", error);
@@ -121,22 +103,17 @@ const RightmainUpload = () => {
 		}
 	};
 
-	const filteredFiles = uploadedFiles.filter((file) => {
+	const filteredFiles = uploadedFiles?.filter(file => {
 		if (filterType === "all") return true;
-		if (filterType === "image" && file.fileType.startsWith("image/"))
-			return true;
-		if (filterType === "video" && file.fileType.startsWith("video/"))
-			return true;
-		if (filterType === "pdf" && file.fileType.startsWith("video/"))
-			return true;
+		if (filterType === "image" && file.fileType.startsWith("image/")) return true;
+		if (filterType === "video" && file.fileType.startsWith("video/")) return true;
+		if (filterType === "pdf" && file.fileType.startsWith("video/")) return true;
 		return false;
 	});
 
 	return (
 		<div className="w-full">
-			{showSuccessMessage && (
-				<SuccessMessage message="Files uploaded successfully!" />
-			)}
+			{showSuccessMessage && <SuccessMessage message="Files uploaded successfully!" />}
 			<div className="firstsectionupload">
 				<div className="flex items-center justify-center gap-2 mb-3">
 					<UploadIcon className="size-7" />
@@ -144,7 +121,9 @@ const RightmainUpload = () => {
 				</div>
 				<div className="flex items-center justify-center gap-2">
 					<div className="btn-upload">
-						<label htmlFor="file-input" className="w-auto bg-white text-primary border border-primary text-lg rounded-lg px-3 py-1.5 font-semibold cursor-pointer">
+						<label
+							htmlFor="file-input"
+							className="w-auto bg-white text-primary border border-primary text-lg rounded-lg px-3 py-1.5 font-semibold cursor-pointer">
 							Add files
 						</label>
 						<input
@@ -156,31 +135,25 @@ const RightmainUpload = () => {
 							multiple
 						/>
 					</div>
-					<button className="w-auto bg-primary text-white text-lg rounded-lg px-3 py-1 cursor-pointer" onClick={handleUpload}>
+					<button
+						className="w-auto bg-primary text-white text-lg rounded-lg px-3 py-1 cursor-pointer"
+						onClick={handleUpload}>
 						Upload
 					</button>
 				</div>
 			</div>
 			<div className="secondsectionupload">
 				<div className="second-btn flex gap-2">
-					<button
-						onClick={() => handleFilter("all")}
-						className={filterType === "all" ? "active" : ""}>
+					<button onClick={() => handleFilter("all")} className={filterType === "all" ? "active" : ""}>
 						All
 					</button>
-					<button
-						onClick={() => handleFilter("image")}
-						className={filterType === "image" ? "active" : ""}>
+					<button onClick={() => handleFilter("image")} className={filterType === "image" ? "active" : ""}>
 						Image
 					</button>
-					<button
-						onClick={() => handleFilter("video")}
-						className={filterType === "video" ? "active" : ""}>
+					<button onClick={() => handleFilter("video")} className={filterType === "video" ? "active" : ""}>
 						Video
 					</button>
-					<button
-						onClick={() => handleFilter("pdf")}
-						className={filterType === "pdf" ? "active" : ""}>
+					<button onClick={() => handleFilter("pdf")} className={filterType === "pdf" ? "active" : ""}>
 						Pdf
 					</button>
 				</div>
@@ -196,13 +169,9 @@ const RightmainUpload = () => {
 
 			<div className="uploaded-files-actions">
 				<button onClick={handleSelectAll}>
-					{selectedUploadedFiles.length === filteredFiles.length
-						? "Unselect All"
-						: "Select All"}
+					{selectedUploadedFiles.length === filteredFiles.length ? "Unselect All" : "Select All"}
 				</button>
-				<button
-					onClick={handleDeleteSelected}
-					disabled={selectedUploadedFiles.length === 0}>
+				<button onClick={handleDeleteSelected} disabled={selectedUploadedFiles.length === 0}>
 					Delete Selected
 				</button>
 			</div>
@@ -212,88 +181,44 @@ const RightmainUpload = () => {
 					filteredFiles.map((file, index) => (
 						<div
 							key={index}
-							className={`file-item ${
-								selectedUploadedFiles.includes(file.key)
-									? "selected"
-									: ""
+							className={`file-item min-w-20 border shadow rounded-lg  ${
+								selectedUploadedFiles.includes(file.key) ? "selected" : ""
 							}`}>
 							{file.fileType.startsWith("image/") && (
 								<div>
-									<img
-										src={`${file.url}`}
-										alt={file.fileName}
-									/>
+									<img src={`${file.url}`} alt={file.fileName} />
 									<button
 										type="button"
-										className={`${
-											selectedUploadedFiles.includes(
-												file.key
-											)
-												? "button-selected"
-												: ""
-										}`}
-										onClick={() =>
-											handleSelectFile(file.key)
-										}></button>
+										className={`${selectedUploadedFiles.includes(file.key) ? "button-selected" : ""}`}
+										onClick={() => handleSelectFile(file.key)}></button>
 								</div>
 							)}
 							{file.fileType.startsWith("video/") && (
 								<div className="relative">
 									<video
-										className={`mainimgs rounded-xl ${
-											selectedUploadedFiles.includes(
-												file.key
-											)
-												? "selected"
-												: ""
-										}`}
+										className={`mainimgs rounded-xl ${selectedUploadedFiles.includes(file.key) ? "selected" : ""}`}
 										controls>
-										<source
-											src={`${file.url}`}
-											type={file.fileType}
-										/>
-										Your browser does not support the video
-										tag.
+										<source src={`${file.url}`} type={file.fileType} />
+										Your browser does not support the video tag.
 									</video>
 									<button
-										className={`${
-											selectedUploadedFiles.includes(
-												file.key
-											)
-												? "button-selected"
-												: ""
-										}`}
-										onClick={() =>
-											handleSelectFile(file.key)
-										}></button>
+										className={`${selectedUploadedFiles.includes(file.key) ? "button-selected" : ""}`}
+										onClick={() => handleSelectFile(file.key)}></button>
 								</div>
 							)}
 							{file.fileType.startsWith("application") && (
-								<div
-									className="pdf-icon"
-									onClick={() => handleSelectFile(file.key)}>
-									<AiFillFilePdf
-										className="pdf-viewer"
-										size={100}
-									/>
-									<p className="pdf-file-font-size">
-										{file.name}
-									</p>
+								<div className="pdf-icon" onClick={() => handleSelectFile(file.key)}>
+									<AiFillFilePdf className="pdf-viewer" size={100} />
+									<p className="pdf-file-font-size">{file.name}</p>
 								</div>
 							)}
 						</div>
 					))
 				) : (
 					<h1 className="bg-primary/20 text-4xl text-primary w-full flex flex-col items-center justify-center h-auto px-6 py-8 pt-2 border-2 border-dashed border-primary rounded-lg">
-						<img
-							src={not_found}
-							className="h-48 w-auto -mb-3"
-							alt=""
-						/>
+						<img src={not_found} className="h-48 w-auto -mb-3" alt="" />
 						No Files found
-						<span className="text-lg font-normal mt-1 mb-5">
-							Please add some files first to send messages
-						</span>
+						<span className="text-lg font-normal mt-1 mb-5">Please add some files first to send messages</span>
 					</h1>
 				)}
 			</div>

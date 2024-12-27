@@ -43,7 +43,7 @@ function FormikTextarea({
 			<label htmlFor={name} className={`${labelClassName} absolute top-0 left-0 bg-white`}>
 				{label}
 			</label>
-			<ErrorMessage name={name} className={`text-red-500 text-sm font-normal ${errorClassName}`} component="div" />
+			<ErrorMessage name={name} className={`text-red-500 text-xs font-normal ${errorClassName}`} component="div" />
 		</div>
 	);
 }

@@ -12,8 +12,8 @@ import { ToastContainer } from "react-toastify";
 // Create Redux store
 const store = createStore(rootReducer);
 
-axios.defaults.baseURL = "https://largely-touching-lab.ngrok-free.app";
-// axios.defaults.baseURL = "http://localhost:5000";
+// axios.defaults.baseURL = "https://largely-touching-lab.ngrok-free.app";
+axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.baseURL = "https://ae1f-223-178-103-231.ngrok-free.app";
 axios.defaults.headers.common["ngrok-skip-browser-warning"] = true;
 axios.interceptors.request.use(

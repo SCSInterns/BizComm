@@ -42,7 +42,7 @@ const Badges = ({ type }) => {
 	};
 	return (
 		<span
-			className={`relative before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-1000 text-xs p-1.5 px-3 rounded-full w-fit border flex items-center gap-1 ${variants[type.toLowerCase()] ? variants[type.toLowerCase()].classes : ""}`}>
+			className={`relative capitalize before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-1000 text-xs p-1.5 px-3 rounded-full w-fit border flex items-center gap-1 ${variants[type.toLowerCase()] ? variants[type.toLowerCase()].classes : ""}`}>
 			{ variants[type.toLowerCase()] ? variants[type.toLowerCase()].icon : <></>}
 			{type}
 		</span>

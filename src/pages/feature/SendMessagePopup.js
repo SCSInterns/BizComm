@@ -113,7 +113,7 @@ const SendMessagePopup = ({ onClose, selectedContacts, showNotification }) => {
 
 	const fetchFiles = async () => {
 		try {
-			const response = await axios.get(`/api/v1/get_files`);
+			const response = await axios.get(`/api/v1/users/get_files`);
 			setAvailableFiles(response.data.files);
 			setShowFilePopup(true);
 		} catch (error) {
